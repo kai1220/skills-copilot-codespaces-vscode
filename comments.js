@@ -1,4 +1,4 @@
-// create web server
+// Create web server
 // 1. create a server object
 // 2. listen on port 8080
 // 3. create a response header
