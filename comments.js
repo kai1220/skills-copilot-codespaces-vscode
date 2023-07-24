@@ -1,63 +1,25 @@
-// create web server using express
-// load express module
+// create web server
 const express = require('express');
-// create express object
 const app = express();
+const port = 3000;
 
-// load body-parser module
-const bodyParser = require('body-parser');
-// load mongoose module
-const mongoose = require('mongoose');
-// connect to database
-mongoose.connect('mongodb://localhost:27017/comments', { useNewUrlParser: true });
-// create schema
-const commentSchema = new mongoose.Schema({
-  name: String,
-  comment: String
-});
-// create model
-const Comment = mongoose.model('Comment', commentSchema);
+// create a router
+const router = express.Router();
 
-// configure body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
-// set view engine
-app.set('view engine', 'ejs');
-// serve static files
-app.use(express.static('public'));
+// use the router
+app.use(router);
 
-// root route
-app.get('/', (req, res) => {
-  // find all comments from database
-  Comment.find({}, (err, comments) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // render index.ejs with comments
-      res.render('index', { comments: comments });
-    }
-  });
+// create a route
+router.get('/', (req, res) => {
+    res.send('Hello World!');
 });
 
-// new route
-app.get('/new', (req, res) => {
-  // render new.ejs
-  res.render('new');
+// create another route
+router.get('/comments', (req, res) => {
+    res.send('Comments');
 });
 
-// create route
-app.post('/', (req, res) => {
-  // create new comment
-  Comment.create(req.body.comment, (err, newComment) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // redirect to root route
-      res.redirect('/');
-    }
-  });
-});
-
-// start server
-app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
+// start the server
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
